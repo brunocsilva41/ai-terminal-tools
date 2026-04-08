@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "profiles": [
+    {
+      "id": "deploy-specialist",
+      "aliases": ["/deploy", "/deploy-specialist", "/release"],
+      "description": "Pesquisa, planeja e executa deploy com confirmação obrigatória.",
+      "promptFile": "prompts/deploy/deploy_specialist_system.md"
+    },
+    {
+      "id": "architect",
+      "aliases": ["/architect", "/design-system"],
+      "description": "Arquitetura e estratégia técnica.",
+      "promptFile": "prompts/architecture/system_design.md"
+    },
+    {
+      "id": "reviewer",
+      "aliases": ["/review", "/code-review"],
+      "description": "Revisão técnica e riscos.",
+      "promptFile": "prompts/review/code_review.md"
+    },
+    {
+      "id": "tester",
+      "aliases": ["/test", "/qa"],
+      "description": "Estratégia de testes e validação.",
+      "promptFile": "prompts/testing/test_strategy.md"
+    },
+    {
+      "id": "orchestrator",
+      "aliases": ["/orchestrate", "/pipeline"],
+      "description": "Orquestração multi-agente.",
+      "promptFile": "prompts/orchestration/multi_agent_flow.md"
+    },
+    {
+      "id": "security",
+      "aliases": ["/security", "/supply-chain"],
+      "description": "Auditoria de segurança e supply chain.",
+      "promptFile": "prompts/security/supply_chain.md"
+    }
+  ]
+}

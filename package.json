@@ -1,0 +1,22 @@
+{
+  "name": "universal-ai-terminal-tools",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Universal AI terminal toolkit with contract-driven tools and multi-CLI adapters.",
+  "scripts": {
+    "setup": "node setup.js",
+    "setup:non-interactive": "node setup.js --non-interactive --profile full --yes --configure-path",
+    "doctor": "node setup.js doctor",
+    "activations:list": "node wrappers/activation-profiles/compose_prompt.mjs --list",
+    "deploy:plan": "python core-scripts/deploy/deploy_orchestrator.py plan --mode artifact --cwd . --research-ref https://docs.github.com/en/actions",
+    "deploy:template": "python core-scripts/deploy/deploy_orchestrator.py confirm-template --mode artifact --environment staging --dry-run",
+    "deploy:precheck": "python core-scripts/deploy/deploy_orchestrator.py precheck --mode artifact --cwd . --research-ref https://docs.github.com/en/actions",
+    "validate:contracts": "node automation/validate_tool_contracts.mjs",
+    "smoke": "node automation/smoke_core.mjs",
+    "ci:check": "npm run doctor && npm run validate:contracts && npm run smoke"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

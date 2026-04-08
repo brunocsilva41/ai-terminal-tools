@@ -1,0 +1,13 @@
+{
+  "name": "universal-ai-tools-mcp",
+  "version": "3.0.0",
+  "description": "MCP Server that exposes Core Scripts for Claude CLI",
+  "type": "module",
+  "main": "mcp_server.js",
+  "scripts": {
+    "start": "node mcp_server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.1.0"
+  }
+}

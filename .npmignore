@@ -1,0 +1,9 @@
+# Excluir artefatos e metadados locais de empacotamento npm
+.git
+.github
+.vscode
+.codex
+.deploy-reports
+.tmp-smoke
+*.log
+__pycache__

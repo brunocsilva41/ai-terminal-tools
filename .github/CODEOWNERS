@@ -1,0 +1,6 @@
+# Configure code owners for this repository.
+# Example:
+# * @your-github-user
+# /.github/ @your-github-user
+# /core-scripts/ @your-github-user
+# /wrappers/ @your-github-user

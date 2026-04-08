@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Universal Terminal Tools",
+  "name_for_model": "terminal_tools",
+  "description_for_human": "A collection of AI-ready scripts for DevOps, Git, Web, and Data.",
+  "description_for_model": "Use this plugin to run local terminal commands to analyze docker, parse git diffs, scaffold web components, and analyze large CSV files.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "http://localhost:3333/openapi.yaml"
+  },
+  "logo_url": "http://localhost:3333/logo.png",
+  "contact_email": "support@example.com",
+  "legal_info_url": "http://www.example.com/legal"
+}

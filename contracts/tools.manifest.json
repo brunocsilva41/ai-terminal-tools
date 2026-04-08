@@ -1,0 +1,654 @@
+{
+  "$schema": "./tool-contract.schema.json",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "devops_docker_clean",
+      "description": "Analisa status do Docker e opcionalmente executa limpeza de recursos não utilizados.",
+      "stability": "stable",
+      "owner": "devops",
+      "safetyLevel": "medium",
+      "permissions": {
+        "filesystem": "none",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "clean": {
+            "type": "boolean",
+            "default": false,
+            "description": "Quando true, roda prune em containers e imagens dangling."
+          }
+        },
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/devops/docker_clean.py",
+        "args": [
+          {
+            "kind": "flag",
+            "input": "clean",
+            "flag": "--clean",
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "timeoutMs": 120000
+      }
+    },
+    {
+      "name": "devops_dokploy_status",
+      "description": "Coleta status do contexto Dokploy/Multipass.",
+      "stability": "stable",
+      "owner": "devops",
+      "safetyLevel": "medium",
+      "permissions": {
+        "filesystem": "none",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/devops/dokploy_manager.py",
+        "fixedArgs": [
+          "status"
+        ],
+        "timeoutMs": 120000
+      }
+    },
+    {
+      "name": "devops_dokploy_exec",
+      "description": "Executa comando dentro de uma VM gerenciada pelo Multipass.",
+      "stability": "stable",
+      "owner": "devops",
+      "safetyLevel": "high",
+      "permissions": {
+        "filesystem": "none",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "vm": {
+            "type": "string",
+            "description": "Nome da VM alvo."
+          },
+          "command": {
+            "type": "string",
+            "description": "Comando a ser executado dentro da VM."
+          }
+        },
+        "required": [
+          "vm",
+          "command"
+        ],
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/devops/dokploy_manager.py",
+        "fixedArgs": [
+          "exec"
+        ],
+        "args": [
+          {
+            "kind": "positional",
+            "input": "vm",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "kind": "positional",
+            "input": "command",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "timeoutMs": 180000
+      }
+    },
+    {
+      "name": "git_analyzer",
+      "description": "Resumo de mudanças no repositório git local.",
+      "stability": "stable",
+      "owner": "git",
+      "safetyLevel": "low",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "analyze",
+              "log"
+            ],
+            "default": "analyze"
+          }
+        },
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/git/git_analyzer.py",
+        "args": [
+          {
+            "kind": "positional",
+            "input": "action",
+            "required": false,
+            "type": "string",
+            "default": "analyze"
+          }
+        ],
+        "timeoutMs": 120000
+      }
+    },
+    {
+      "name": "data_csv_analyze",
+      "description": "Lê e resume um arquivo CSV.",
+      "stability": "stable",
+      "owner": "data",
+      "safetyLevel": "low",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "description": "Caminho para o CSV."
+          }
+        },
+        "required": [
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/data/csv_analyzer.py",
+        "args": [
+          {
+            "kind": "positional",
+            "input": "filePath",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "timeoutMs": 120000
+      }
+    },
+    {
+      "name": "web_react_scaffold",
+      "description": "Gera componente React (TSX, CSS e index).",
+      "stability": "stable",
+      "owner": "web",
+      "safetyLevel": "medium",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do componente em PascalCase."
+          },
+          "targetDir": {
+            "type": "string",
+            "default": "./src/components"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": "node",
+        "script": "core-scripts/web/react_scaffold.js",
+        "args": [
+          {
+            "kind": "positional",
+            "input": "name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "kind": "positional",
+            "input": "targetDir",
+            "required": false,
+            "type": "string",
+            "default": "./src/components"
+          }
+        ],
+        "timeoutMs": 120000
+      }
+    },
+    {
+      "name": "tools_browser",
+      "description": "Automação web com Playwright (extrair texto, links ou screenshot).",
+      "stability": "stable",
+      "owner": "tools",
+      "safetyLevel": "medium",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": true,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string",
+            "enum": [
+              "extract_text",
+              "links",
+              "screenshot"
+            ],
+            "default": "extract_text"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": "node",
+        "script": "core-scripts/tools/browser_tool.js",
+        "args": [
+          {
+            "kind": "positional",
+            "input": "url",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "kind": "positional",
+            "input": "task",
+            "required": false,
+            "type": "string",
+            "default": "extract_text"
+          }
+        ],
+        "timeoutMs": 180000
+      }
+    },
+    {
+      "name": "tools_reviewer",
+      "description": "Executa revisão estática local (eslint/tsc) para um projeto.",
+      "stability": "stable",
+      "owner": "qa",
+      "safetyLevel": "medium",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectPath": {
+            "type": "string",
+            "default": "."
+          }
+        },
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": "node",
+        "script": "core-scripts/tools/reviewer_tool.js",
+        "args": [
+          {
+            "kind": "positional",
+            "input": "projectPath",
+            "required": false,
+            "type": "string",
+            "default": "."
+          }
+        ],
+        "timeoutMs": 180000
+      }
+    },
+    {
+      "name": "tools_postman_run",
+      "description": "Executa coleção Postman via Newman.",
+      "stability": "stable",
+      "owner": "qa",
+      "safetyLevel": "medium",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": true,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "collectionPath": {
+            "type": "string"
+          },
+          "envPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "collectionPath"
+        ],
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/tools/postman_manager.py",
+        "args": [
+          {
+            "kind": "positional",
+            "input": "collectionPath",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "kind": "positional",
+            "input": "envPath",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "timeoutMs": 180000
+      }
+    },
+    {
+      "name": "tools_dbeaver_list",
+      "description": "Lista conexões do DBeaver local.",
+      "stability": "stable",
+      "owner": "data",
+      "safetyLevel": "low",
+      "permissions": {
+        "filesystem": "user",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/tools/dbeaver_manager.py",
+        "fixedArgs": [
+          "list"
+        ],
+        "timeoutMs": 120000
+      }
+    },
+    {
+      "name": "tools_dbeaver_run",
+      "description": "Executa script SQL numa conexão DBeaver.",
+      "stability": "stable",
+      "owner": "data",
+      "safetyLevel": "high",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": false,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "connectionName": {
+            "type": "string"
+          },
+          "sqlFile": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "connectionName",
+          "sqlFile"
+        ],
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/tools/dbeaver_manager.py",
+        "fixedArgs": [
+          "run"
+        ],
+        "args": [
+          {
+            "kind": "positional",
+            "input": "connectionName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "kind": "positional",
+            "input": "sqlFile",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "timeoutMs": 180000
+      }
+    },
+    {
+      "name": "deploy_orchestrator",
+      "description": "Planeja, valida e executa deploy com confirmação obrigatória.",
+      "stability": "stable",
+      "owner": "release-engineering",
+      "safetyLevel": "high",
+      "permissions": {
+        "filesystem": "workspace",
+        "network": true,
+        "shell": false
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "plan",
+              "precheck",
+              "confirm-template",
+              "execute"
+            ],
+            "default": "plan"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "artifact",
+              "npm",
+              "docker",
+              "script"
+            ],
+            "default": "artifact"
+          },
+          "cwd": {
+            "type": "string",
+            "default": "."
+          },
+          "environment": {
+            "type": "string",
+            "default": "unspecified"
+          },
+          "confirm": {
+            "type": "string",
+            "description": "Obrigatório para execute: DEPLOY_NOW"
+          },
+          "researchRefs": {
+            "type": "string",
+            "description": "Lista de URLs oficiais separadas por vírgula."
+          },
+          "dryRun": {
+            "type": "boolean",
+            "default": false
+          },
+          "imageTag": {
+            "type": "string"
+          },
+          "push": {
+            "type": "boolean",
+            "default": false
+          },
+          "scriptPath": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "allowUnofficialResearch": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "action",
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "execution": {
+        "command": [
+          "python",
+          "python3"
+        ],
+        "script": "core-scripts/deploy/deploy_orchestrator.py",
+        "args": [
+          {
+            "kind": "positional",
+            "input": "action",
+            "required": true,
+            "type": "string",
+            "default": "plan"
+          },
+          {
+            "kind": "option",
+            "input": "mode",
+            "option": "--mode",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "kind": "option",
+            "input": "cwd",
+            "option": "--cwd",
+            "required": false,
+            "type": "string",
+            "default": "."
+          },
+          {
+            "kind": "option",
+            "input": "environment",
+            "option": "--environment",
+            "required": false,
+            "type": "string",
+            "default": "unspecified"
+          },
+          {
+            "kind": "option",
+            "input": "confirm",
+            "option": "--confirm",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "kind": "option",
+            "input": "researchRefs",
+            "option": "--research-refs",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "kind": "flag",
+            "input": "dryRun",
+            "flag": "--dry-run",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "kind": "flag",
+            "input": "allowUnofficialResearch",
+            "flag": "--allow-unofficial-research",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "kind": "option",
+            "input": "imageTag",
+            "option": "--image-tag",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "kind": "flag",
+            "input": "push",
+            "flag": "--push",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "kind": "option",
+            "input": "scriptPath",
+            "option": "--script-path",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "kind": "option",
+            "input": "reportPath",
+            "option": "--report-path",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "timeoutMs": 1800000
+      }
+    }
+  ]
+}

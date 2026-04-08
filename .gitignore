@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# Runtime-generated context
+core-scripts/context/scan_config.json
+core-scripts/context/PROJECTS_MAP.json
+
+# Build/pack artifacts
+*.tgz
+dist/
+.tmp-smoke/
+.tmpdist/
+.deploy-reports/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
