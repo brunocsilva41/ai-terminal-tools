@@ -25,9 +25,11 @@ def analyze_csv(filepath, limit=5):
         result = {
             "status": "success",
             "file": filepath,
-            "total_rows": row_count,
-            "columns": headers,
-            "sample_data": sample_rows
+            "data": {
+                "total_rows": row_count,
+                "columns": headers,
+                "sample_data": sample_rows
+            }
         }
         print(json.dumps(result, indent=2))
         
